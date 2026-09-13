@@ -1,0 +1,46 @@
+services:
+  app:
+    build:
+      context: ./demoapplication
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+      - "35729:35729"
+    environment:
+      - SPRING_DEVTOOLS_RESTART_ENABLED=true
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/demodb
+      - SPRING_DATASOURCE_USERNAME=demo
+      - SPRING_DATASOURCE_PASSWORD=demo
+    depends_on:
+      db:
+        condition: service_healthy
+    develop:
+      watch:
+        - path: ./demoapplication/build.gradle
+          action: rebuild
+        - path: ./demoapplication/settings.gradle
+          action: rebuild
+        - path: ./demoapplication/gradle.properties
+          action: rebuild
+        - path: ./demoapplication/src
+          target: /app/src
+          action: sync+restart
+
+  db:
+    image: postgres:17
+    environment:
+      - POSTGRES_DB=demodb
+      - POSTGRES_USER=demo
+      - POSTGRES_PASSWORD=demo
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U demo -d demodb"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  pgdata:
