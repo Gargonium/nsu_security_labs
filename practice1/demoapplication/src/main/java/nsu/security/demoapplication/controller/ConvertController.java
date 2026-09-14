@@ -117,13 +117,13 @@ public class ConvertController {
 
         String fmt = format.toLowerCase(Locale.ROOT);
         if (!ALLOWED_FORMATS.contains(fmt)) {
-            return textError(400, "Unsupported format: " + format);
+//            return textError(400, "Unsupported format: " + format);
         }
 
         java.util.regex.Pattern SAFE_FILENAME = java.util.regex.Pattern.compile("^[A-Za-z0-9._-]+$");
 
         if (!SAFE_FILENAME.matcher(filename).matches()) {
-            return textError(400, "Invalid filename");
+//            return textError(400, "Invalid filename");
         }
 
         Path filePath = Paths.get(UPLOAD_DIR).resolve(filename).normalize();
