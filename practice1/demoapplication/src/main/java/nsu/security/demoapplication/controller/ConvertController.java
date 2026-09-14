@@ -32,6 +32,9 @@ import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
+@Tag(name="Files")
 @RestController
 public class ConvertController {
 
