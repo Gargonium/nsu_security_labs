@@ -8,6 +8,13 @@ RUN gradle dependencies --no-daemon || true
 
 COPY src src
 
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends \
+      imagemagick \
+      procps \
+      curl \
+ && rm -rf /var/lib/apt/lists/*
+
 EXPOSE 8080
 
 CMD ["gradle", "bootRun", "--no-daemon"]
